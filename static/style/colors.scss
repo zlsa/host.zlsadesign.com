@@ -1,0 +1,15 @@
+
+$hue: 190;
+$sat: 30%;
+
+$error-hue: 15;
+$error-sat: 90%;
+
+$bg: hsl($hue, $sat, 15%);
+$border-color: hsl($hue, $sat, 30%);
+$fg: hsl($hue, $sat, 90%);
+$fg-secondary: hsl($hue, $sat * 0.5, 60%);
+
+$error-bg: rgba(hsl($error-hue, $error-sat, 60%), 0.1);
+$error-border: hsl($error-hue, $error-sat, 40%);
+$error-fg: hsl($error-hue, $error-sat, 60%);

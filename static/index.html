@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  
+  <head>
+    <title>host.zlsadesign.com</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/style/main.scss" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/static/script/files.js"></script>
+  </head>
+  
+  <body class="no-js">
+
+    <script>$('body').removeClass('no-js')</script>
+
+    <header id="header">
+      <h1>host.zlsadesign.com</h1>
+    </header>
+
+    <section id="upload">
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        
+        <div class="file-upload-button">
+          <span class="needs-js">Select files</span>
+          <input id="file-upload" type="file" name="files" multiple="multiple" />
+        </div><button class="submit" type="submit">Upload</button>
+        
+      </form>
+
+    </section>
+
+    <table class="files">
+      <thead></thead>
+      <tbody>
+      </tbody>
+    </table>
+
+  </body>
+  
+</html>

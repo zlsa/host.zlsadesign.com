@@ -1,0 +1,44 @@
+
+@import 'colors';
+
+.files {
+  @include column();
+
+  border-spacing: 0;
+  border-collapse: collapse;
+
+  tr {
+
+    border: 0 solid $border-color;
+    border-width: $border-width 0;
+
+    &.error {
+      background-color: $error-bg;
+      color: $error-fg;
+
+      .size {
+        color: rgba($error-fg, 0.6);
+      }
+      
+    }
+
+    td {
+      padding: $vpadding $hpadding;
+
+      text-align: left;
+
+      &.name {
+        font-weight: bold;
+      }
+      
+      .size {
+        width: 10%;
+      }
+
+      .message {
+      }
+
+    }
+  }
+  
+}

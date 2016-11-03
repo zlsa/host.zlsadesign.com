@@ -1,0 +1,6 @@
+meta.db
+*~
+host.log
+storage/
+uploads/
+node_modules

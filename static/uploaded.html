@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+  
+  <head>
+    <title>processed {{number}} file{{number_plural}} - host.zlsadesign.com</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="/static/style/main.scss" />
+  </head>
+  
+  <body class="upload-success">
+
+    <header id="header">
+      <h1 class="code">processed {{number}} file{{number_plural}}</h1>
+    </header>
+
+    <table class="files">
+      <thead></thead>
+      <tbody>
+        {{#files}}
+        <tr class="{{status}}">
+          <td class="name">{{#url}}<a href="{{url}}">{{name}}</a>{{/url}}{{^url}}{{name}}{{/url}}</td>
+          <td class="size">{{size}}</td>
+          <td class="message">{{message}}</td>
+        </tr>
+        {{/files}}
+      </tbody>
+    </table>
+
+    <div class="go-home">
+      upload more files at <a href="/">host.zlsadesign.com</a>
+    </div>
+
+  </body>
+  
+</html>

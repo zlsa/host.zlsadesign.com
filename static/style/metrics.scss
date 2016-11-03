@@ -1,0 +1,19 @@
+
+$grid: 8px;
+
+$margin: $grid * 3;
+$unit: $grid * 6;
+
+$hpadding: $grid * 3;
+$vpadding: $grid;
+
+$spacing: $grid * 4;
+
+$border-width: 1px;
+
+@mixin column() {
+  width: 100%;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
