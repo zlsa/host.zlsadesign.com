@@ -3,8 +3,13 @@
 const app = require('./app.js');
 
 const log = require('./log.js');
+const util = require('./util.js');
 
 log.info("host.zlsadesign.com startup");
+
+if(!util.prod) {
+  log.warn("not in production mode; expect lots of logging");
+}
 
 var a = new app.App();
 
