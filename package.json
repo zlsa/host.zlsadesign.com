@@ -9,7 +9,7 @@
   ],
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node ./server.js"
   },
   "version": "0.0.1",
   "license": "MIT",

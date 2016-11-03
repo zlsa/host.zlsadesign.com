@@ -1,0 +1,24 @@
+
+@import 'metrics';
+@import 'colors';
+
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  padding: $vpadding 0;
+  
+  color: $fg-secondary;
+  font-size: 9px;
+
+  text-align: center;
+
+  span {
+    display: block;
+    height: $grid * 2;
+    line-height: $grid * 2;
+  }
+  
+}

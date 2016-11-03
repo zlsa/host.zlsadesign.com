@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const process = require('process');
 const prettyBytes = require('pretty-bytes');
 
 function copyFile(source, target) {
@@ -55,3 +56,5 @@ exports.mime = {
   'video/h263': 'video/h263',
   'video/h264': 'video/h264'
 };
+
+exports.prod = process.env.NODE_ENV == 'production';

@@ -61,6 +61,12 @@
 
   button.submit {
     margin-left: 0;
+
+    &.disabled {
+      opacity: 0.5;
+
+      pointer-events: none;
+    }
     
     &:hover {
       cursor: pointer;
@@ -68,7 +74,19 @@
     }
     
   }
-  
+
+}
+
+.max-size {
+  padding: $vpadding 0;
+
+  color: $fg-secondary;
+
+  @include column();
+
+  text-align: center;
+
+  font-style: italic;
 }
 
 body.no-js {

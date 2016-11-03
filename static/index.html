@@ -2,13 +2,15 @@
 <html>
   
   <head>
-    <title>host.zlsadesign.com</title>
+    <title>upload - host.zlsadesign.com</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="shortcut icon" href="favicon.ico?v=foo" />
     <link rel="stylesheet" href="/static/style/main.scss" />
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/config.js"></script>
     <script src="/static/script/files.js"></script>
   </head>
   
@@ -28,8 +30,12 @@
           <input id="file-upload" type="file" name="files" multiple="multiple" />
         </div><button class="submit" type="submit">Upload</button>
         
+        <script>$('button.submit').addClass('disabled')</script>
+        
       </form>
 
+      <div class="max-size">limit of 15 MB per file</div>
+      
     </section>
 
     <table class="files">
@@ -37,6 +43,14 @@
       <tbody>
       </tbody>
     </table>
+
+    <footer>
+      <span class="disclaimer">By using this website, you agree to not
+      upload illegal or nsfw content. If you find such content,
+      please <a href="mailto:jonross.zlsa+host@gmail.com">email me</a>
+      with the URL.</span>
+      <span class="copyright">&copy; Copyright 2016 ZLSA Design.</span>
+    </footer>
 
   </body>
   

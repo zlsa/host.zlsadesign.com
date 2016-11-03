@@ -31,7 +31,7 @@ class App {
         scss: 'style'
       },
       upload: {
-        max_size: 50 * 1000 * 1000
+        max_size: 15 * 1000 * 1000
       },
       storage: {
         max_cache: 300,
@@ -69,6 +69,15 @@ class App {
     this.app.get('/', (req, res) => {
       log.info(req.ip + ": /");
       res.sendFile(path.join(process.cwd(), this.config.dir.static, 'index.html'));
+    });
+
+    this.app.get('/config.js', (req, res) => {
+      res.set('Content-Type', 'application/javascript');
+      res.send("var CONFIG = {upload: {max_size: " + this.config.upload.max_size + "}}");
+    });
+
+    this.app.get('/favicon.ico', (req, res) => {
+      res.sendFile(path.join(process.cwd(), this.config.dir.static, 'images/favicon.ico'));
     });
 
     this.app.post('/upload', this.upload.array('files'), (req, res, next) => {
@@ -118,15 +127,6 @@ class App {
   addMulterFile(req, res, info) {
 
     return new Promise((resolve, reject) => {
-
-      if(info.originalname == 'index.html') {
-        resolve({
-          status: 'error',
-          message: 'too index.html-like',
-          info: info
-        });
-        return;
-      }
 
       this.storage.addFile({
         upload_filename: info.originalname,

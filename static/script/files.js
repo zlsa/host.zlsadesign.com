@@ -1,36 +1,43 @@
+function s(n, singular, plural) {
+  if(singular === undefined) singular = '';
+  if(plural === undefined) plural = 's';
 
-const UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  if(n === 1) return singular;
+  return plural;
+};
 
 function prettyBytes(num) {
-	if (!Number.isFinite(num)) {
-		throw new TypeError(`Expected a finite number, got ${typeof num}: ${num}`);
-	}
+	if(!Number.isFinite(num)) return num;
 
-	const neg = num < 0;
-
-	if (neg) {
-		num = -num;
-	}
-
-	if (num < 1) {
-		return (neg ? '-' : '') + num + ' B';
-	}
-
+  const UNITS = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  
 	const exponent = Math.min(Math.floor(Math.log(num) / Math.log(1000)), UNITS.length - 1);
 	const numStr = Number((num / Math.pow(1000, exponent)).toPrecision(3));
 	const unit = UNITS[exponent];
 
-	return (neg ? '-' : '') + numStr + ' ' + unit;
+	return numStr + ' ' + unit;
 }
 
-var max_size = 50 * 1000 * 1000;
+function setCanUpload(can) {
+  $('button.submit').toggleClass('disabled', !can);
+}
 
 function handleFilesChanged() {
   $('.files tbody').empty();
-  
+
+  setCanUpload(true);
+
+  var stats = [];
+
   for(var i=0; i<this.files.length; i++) {
-    addFile(this.files[i]);
+    stats.push(addFile(this.files[i]));
   }
+
+  var uploadable = stats.filter(function(v) {return v;}).length;
+  
+  $('button.submit').attr('title', "upload " + uploadable + " files");
+  
+  if(this.files.length == 0) setCanUpload(false);
 }
 
 function attachListeners() {
@@ -45,9 +52,10 @@ function addFile(file) {
 
   var tr = $('<tr></tr>');
 
-  if(file.size > max_size) {
+  if(file.size > CONFIG.upload.max_size) {
     status = 'error';
     message = 'file too large';
+    //setCanUpload(false);
   }
   
   tr.addClass(status);
@@ -66,6 +74,9 @@ function addFile(file) {
   tr.append(message_el);
 
   $('.files tbody').append(tr);
+
+  if(status === 'error') return false;
+  return true;
 }
 
 $(document).ready(function() {
