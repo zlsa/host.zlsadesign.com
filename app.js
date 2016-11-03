@@ -64,6 +64,8 @@ class App {
   initApp() {
     this.app = express();
 
+    this.app.enable('trust proxy');
+
     this.app.get('/', (req, res) => {
       log.info(req.ip + ": /");
       res.sendFile(path.join(process.cwd(), this.config.dir.static, 'index.html'));
