@@ -3,6 +3,8 @@
 @import 'colors';
 
 footer {
+  background-color: $bg;
+  
   position: absolute;
   bottom: 0;
   left: 0;
@@ -17,8 +19,7 @@ footer {
 
   span {
     display: block;
-    height: $grid * 2;
-    line-height: $grid * 2;
+    padding: 4px $hpadding;
   }
   
 }
