@@ -12,8 +12,9 @@
   @include column();
 
   .file-upload-button, button.submit {
+    background: lighten($bg, 5);
+    
     vertical-align: top;
-    border: $border-width solid $border-color;
     
     padding: 0 $hpadding;
     padding-bottom: 20px !important;
@@ -22,6 +23,7 @@
     
     height: $unit;
     line-height: $unit;
+    
   }
 
   .file-upload-button {
@@ -31,14 +33,11 @@
     
     position: relative;
 
-    border: $border-width solid $border-color;
-
-    margin-right: 0;
-    border-right: 0;
+    margin-right: $grid;
 
     &:hover {
       cursor: pointer;
-      background: lighten($bg, 3);
+      background: lighten($bg, 10);
     }
     
     #file-upload {
@@ -65,7 +64,7 @@
     
     &:hover {
       cursor: pointer;
-      background: lighten($bg, 3);
+      background: lighten($bg, 10);
     }
     
   }
@@ -85,8 +84,6 @@ body.no-js {
       #file-upload {
         
         padding: 10px $hpadding !important;
-
-        border-right: none;
 
         position: relative !important;
         top: -2px;

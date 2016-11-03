@@ -86,7 +86,7 @@ class File {
   copyFile(file) {
     return new Promise((resolve, reject) => {
       
-      file.file.path = path.join(__dirname, file.config.dir, file.id);
+      file.file.path = path.join(file.config.dir, file.id);
 
       let from = file.source.path;
       let to = file.file.path;
