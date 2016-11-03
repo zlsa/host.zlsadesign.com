@@ -140,6 +140,11 @@ class File {
     
   }
 
+  isVisible() {
+    if(this.deleted) return false;
+    return true;
+  }
+
   getBuffer() {
     return new Promise((resolve, reject) => {
 

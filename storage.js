@@ -114,8 +114,7 @@ class Storage {
       log.silly("fetching file " + id);
       
       this.db.findOne({
-        id: id,
-        deleted: false
+        id: id
       })
         .then((document) => {
           if(!document) {

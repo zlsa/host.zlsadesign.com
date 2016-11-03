@@ -214,6 +214,12 @@ class App {
     this.storage.getFileById(id)
       .then((file) => {
 
+        if(!file.isVisible()) {
+          log.info(req.ip + " tried to view deleted file: " + id);
+          this.sendErrorCode(req, res, 404);
+          return;
+        }
+
         file.getBuffer()
           .then((buffer) => {
 
