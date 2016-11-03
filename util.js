@@ -46,6 +46,7 @@ exports.mime = {
   'application/xhtml+xml': 'text/plain',
   'application/javascript': 'text/plain',
   'application/json': 'application/json',
+  'application/pdf': 'application/pdf',
   'video/mpeg': 'video/mpeg',
   'video/mj2': 'video/mj2',
   'video/mp4': 'video/mp4',
