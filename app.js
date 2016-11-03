@@ -306,7 +306,7 @@ class App {
 
   start() {
     return new Promise((resolve, reject) => {
-      this.http_server.listen(this.config.port, () => {
+      this.http_server.listen(this.config.port, "0.0.0.0", () => {
         resolve();
       });
     });
