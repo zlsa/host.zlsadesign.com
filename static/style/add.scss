@@ -1,16 +1,30 @@
 
+@import 'metrics';
 @import 'colors';
 
 body.adduser {
   
-  button.submit {
+  button.submit, a.button {
+    background: lighten($bg, 5);
+    
+    padding: 0 $hpadding;
+    
     height: 32px !important;
     line-height: 32px !important;
+
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     
     width: 100%;
     max-width: 20em;
     
     margin-top: $spacing;
+  }
+
+  hr {
+    margin-top: $spacing;
+    border-top: $border-width solid $border-color;
   }
 
 }

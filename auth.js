@@ -67,6 +67,22 @@ class Auth {
     });
   }
 
+  getAllUsers() {
+
+    return this.db.find({})
+      .then((documents) => {
+
+        let users = documents.map((doc) => {
+          let u = new user.User(this.app);
+          u.setFromDocument(doc);
+          return u;
+        });
+        
+        return users;
+      });
+    
+  }
+
   getUserByName(name) {
 
     log.silly("fetching user by name: " + name);

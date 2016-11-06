@@ -200,12 +200,21 @@ input[type=text] {
     background-color: rgba(245, 107, 61, 0.1);
     border-color: #f56b3d; }
 
-body.adduser button.submit {
+body.adduser button.submit, body.adduser a.button {
+  background: #243d42;
+  padding: 0 24px;
   height: 32px !important;
   line-height: 32px !important;
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   width: 100%;
   max-width: 20em;
   margin-top: 16px; }
+
+body.adduser hr {
+  margin-top: 16px;
+  border-top: 1px solid #365c63; }
 
 body.error {
   text-align: center; }

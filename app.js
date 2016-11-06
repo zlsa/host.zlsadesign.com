@@ -106,15 +106,45 @@ class App {
     this.app.enable('trust proxy');
 
     this.app.get('/', (req, res) => {
-      log.info(req.ip + " hit /");
       res.sendFile(path.join(process.cwd(), this.config.dir.static, 'index.html'));
     });
     
-    this.app.get('/users', (req, res) => {
-      log.info(req.ip + " hit /users");
-      res.sendFile(path.join(process.cwd(), this.config.dir.static, 'add.html'));
+    this.app.get('/admin', (req, res) => {
+      res.sendFile(path.join(process.cwd(), this.config.dir.static, 'admin.html'));
     });
+    
+    this.app.get('/users', (req, res) => {
+      this.sendErrorCode(req, res, 401, "you are not an admin");
+    });
+    
+    this.app.post('/users', (req, res) => {
+      this.verifyUser(req, res)
+        .then((user) => {
+          
+          if(!user.isAdmin()) {
+            log.warn("unauthorized adduser attempt from " + user.id + ": " + req.ip);
+            this.sendErrorCode(req, res, 401, "you are not an admin");
+            return;
+          }
 
+          this.auth.getAllUsers()
+            .then((users) => {
+
+              let template_users = users.map((u) => {
+                return {
+                  id: u.id,
+                  name: u.name,
+                  privs: u.privs.join(', ')
+                };
+              });
+
+              log.info(req.ip + " hit /users");
+              this.sendUsersPage(req, res, users);
+            });
+
+        });
+    });
+    
     this.app.get('/add', (req, res) => {
       log.info(req.ip + " hit /add");
       res.sendFile(path.join(process.cwd(), this.config.dir.static, 'add.html'));
@@ -123,19 +153,11 @@ class App {
     this.app.post('/add', (req, res) => {
       log.debug(req.ip + " has sent a request to add a user");
 
-      let id = req.body.user;
-
-      if(!id) {
-        log.warn(req.ip + " did not fill out their user id");
-        this.sendErrorCode(req, res, 401, "you must enter your own user ID");
-        return;
-      }
-
       this.verifyUser(req, res)
-        .then((user) => {
+        .then((admin) => {
           
-          if(!user.isAdmin()) {
-            log.warn("unauthorized adduser attempt from " + id + ": " + req.ip);
+          if(!admin.isAdmin()) {
+            log.warn("unauthorized adduser attempt from " + admin.id + ": " + req.ip);
             this.sendErrorCode(req, res, 401, "you are not an admin");
             return;
           }
@@ -174,7 +196,7 @@ class App {
             privs: privs
           })
             .then((user) => {
-              log.info("added new user " + user.id + " (" + user.name + ") (authorized by " + id + ", from " + req.ip + ")");
+              log.info("added new user " + user.id + " (" + user.name + ") (authorized by " + admin.id + ", from " + req.ip + ")");
               this.sendErrorCode(req, res, 200, "new user: " + user.id + " (" + user.name + ")");
             })
             .catch((err) => {
@@ -295,7 +317,7 @@ class App {
         }
       })
         .then((file) => {
-          log.info(user.id + " (" + user.name + ") uploaded a file: " + file.id + " ('" + file.name + "': " + util.pb(file.file.size) + ")");
+          log.info(user.id + " (" + user.name + ") uploaded a file: " + file.id + " ('" + file.name + "': " + util.pb(file.file.size) + ") from " + req.ip);
           resolve({
             status: 'ok',
             file: file,
@@ -327,6 +349,7 @@ class App {
 
     this.loadTemplate('error', 'error.html');
     this.loadTemplate('uploaded', 'uploaded.html');
+    this.loadTemplate('users', 'users.html');
   }
 
   loadTemplate(name, template) {
@@ -409,6 +432,16 @@ class App {
     } else {
       res.type('txt').send(code + ' ' + string_code + ' (' + message + ')');
     }
+    
+  }
+
+  sendUsersPage(req, res, users) {
+
+    this.templates.users.then((page) => {
+      res.send(page.render({
+        users: users
+      }));
+    });
     
   }
 
