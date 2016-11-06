@@ -90,7 +90,15 @@ class App {
         reject();
       }
 
-      resolve(this.auth.getUserById(id));
+      this.auth.getUserById(id)
+        .then((user) => {
+          resolve(user);
+        })
+        .catch((err) => {
+          log.warn("invalid user", err);
+          this.sendErrorCode(req, res, 401);
+          reject();
+        });
 
     });
 
