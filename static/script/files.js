@@ -140,6 +140,8 @@ class File {
   }
 
   uploadComplete(event) {
+    uploadNextFile();
+    
     if(!event.target.response.files) {
       if(event.target.status === 401) {
         this.setError('not authorized');
@@ -159,8 +161,6 @@ class File {
     } else {
       this.setError(upload.message);
     }
-
-    uploadNextFile();
   }
 
   uploadError(event) {

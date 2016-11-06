@@ -25,7 +25,7 @@ function saveUser() {
 }
 
 function restoreUser() {
-  var val = localStorage['user'];
+  var val = localStorage['user'] || '';
   checkValidUser(val);
   
   $('#user').val(val);
