@@ -12,7 +12,6 @@ const hogan = require("hogan.js");
 
 const HttpStatus = require('http-status-codes');
 const express = require('express');
-const compileSass = require('express-compile-sass');
 
 const multer  = require('multer');
 
@@ -27,11 +26,10 @@ class App {
     
     this.config = merge({
       dir: {
-        static: 'static',
-        scss: 'style'
+        static: 'static'
       },
       upload: {
-        max_size: 15 * 1000 * 1000
+        max_size: 5 * 1000 * 1000
       },
       storage: {
         max_cache: 300,
@@ -128,6 +126,16 @@ class App {
 
     return new Promise((resolve, reject) => {
 
+      if(false) {
+        resolve({
+          status: 'error',
+          info: info,
+          message: 'ugh'
+        });
+
+        return;
+      }
+      
       this.storage.addFile({
         upload_filename: info.originalname,
         upload_size: info.size,
@@ -162,17 +170,6 @@ class App {
 
   // initialize style processing
   initAppStyle() {
-    let scss_path = path.join(this.config.dir.static, this.config.dir.scss);
-    let root = path.join(process.cwd(), scss_path);
-
-    this.app.use('/' + scss_path, compileSass({
-      root: root,
-      sourceMap: true,
-      sourceComments: true,
-      watchFiles: true,
-      logToConsole: false
-    }));
-                 
     this.app.use('/static', express.static(this.config.dir.static));
   }
 
@@ -284,10 +281,14 @@ class App {
       if(data.status === 'ok') {
         data.url = file.file.getUrl();
         data.size = file.file.file.size;
-        data.message = 'success';
+        data.message = "uploaded";
       }
 
       files.push(data);
+    }
+
+    if(files.length == 1 && files[0].status === 'error') {
+      res.status(400);
     }
 
     if(req.accepts('html')) {
@@ -306,8 +307,7 @@ class App {
       });
       
     } else {
-      
-      res.send({status: 'ok', files: files});
+      res.json({status: 'ok', files: files});
     }
     
   }

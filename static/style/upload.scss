@@ -122,3 +122,19 @@ body.no-js {
   
 }
 
+
+@media only screen and (max-device-width: 480px) {
+
+  .file-upload-button, button.submit {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+
+    display: block;
+  }
+
+  button.submit {
+    margin-top: $grid;
+  }
+
+}

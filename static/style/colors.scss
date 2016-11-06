@@ -10,6 +10,9 @@ $border-color: hsl($hue, $sat, 30%);
 $fg: hsl($hue, $sat, 90%);
 $fg-secondary: hsl($hue, $sat * 0.5, 60%);
 
+$bar-bg: hsl($hue, $sat, 11%);
+$bar-fg: rgba(hsl($hue, $sat, 80%), 0.5);
+
 $error-bg: rgba(hsl($error-hue, $error-sat, 60%), 0.1);
 $error-border: hsl($error-hue, $error-sat, 40%);
 $error-fg: hsl($error-hue, $error-sat, 60%);

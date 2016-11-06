@@ -6,7 +6,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/static/style/main.scss" />
+    <link rel="stylesheet" href="/static/style/compiled.css" />
   </head>
   
   <body class="upload-success">
@@ -19,7 +19,7 @@
       <thead></thead>
       <tbody>
         {{#files}}
-        <tr class="{{status}}">
+        <tr data-status="{{status}}">
           <td class="name">{{#url}}<a href="{{url}}">{{name}}</a>{{/url}}{{^url}}{{name}}{{/url}}</td>
           <td class="size">{{size}}</td>
           <td class="message">{{message}}</td>

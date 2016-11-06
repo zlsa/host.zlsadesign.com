@@ -7,9 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" href="favicon.ico?v=foo" />
-    <link rel="stylesheet" href="/static/style/main.scss" />
+    <link rel="stylesheet" href="/static/style/compiled.css" />
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
     <script src="/config.js"></script>
     <script src="/static/script/files.js"></script>
   </head>
@@ -30,6 +31,8 @@
           <input id="file-upload" type="file" name="files" multiple="multiple" />
         </div><button class="submit" type="submit">Upload</button>
         
+        <script>$('button.submit').remove()</script>
+
         <script>$('button.submit').addClass('disabled')</script>
         
       </form>
