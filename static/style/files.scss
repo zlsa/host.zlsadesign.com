@@ -1,4 +1,5 @@
 
+@import 'metrics';
 @import 'colors';
 
 $row-height: 36px;
@@ -13,6 +14,8 @@ $progress-bar-gap: 1px;
   border-collapse: collapse;
 
   table-layout: fixed;
+
+  margin-top: $spacing * 2;
 
   tr {
 
