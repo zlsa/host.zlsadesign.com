@@ -12,6 +12,7 @@ const hogan = require("hogan.js");
 
 const HttpStatus = require('http-status-codes');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 const multer  = require('multer');
 
@@ -19,6 +20,8 @@ const storage = require('./storage.js');
 
 const util = require('./util.js');
 const log = require('./log.js');
+
+const auth = require('./auth.js');
 
 class App {
 
@@ -28,23 +31,36 @@ class App {
       dir: {
         static: 'static'
       },
+      auth: {
+        default_privs: ['upload'],
+        db: './users.db'
+      },
       upload: {
         max_size: 5 * 1000 * 1000
       },
       storage: {
         max_cache: 300,
-        meta: './meta.db',
+        db: './meta.db',
         dir: path.join(process.cwd(), 'storage')
       },
       port: 6925
     }, config);
 
     this.initUploads();
+    this.initAuth();
     this.initStorage();
     this.initApp();
     this.initHttp();
 
     this.initTemplates();
+
+    this.auth.getUserByName('admin')
+      .catch(() => {
+        this.auth.createAdminUser()
+          .then((user) => {
+            log.warn('generated admin user "' + user.id + '". This message is only shown once, so be sure to save the ID somewhere safe!');
+          });
+      });
 
     //this.storage.addTestFiles();
   }
@@ -55,18 +71,122 @@ class App {
     });
   }
 
+  initAuth() {
+    this.auth = new auth.Auth(this);
+  }
+
   initStorage() {
     this.storage = new storage.Storage(this);
+  }
+
+  verifyUser(req, res) {
+    
+    return new Promise((resolve, reject) => {
+      let id = req.body.user;
+
+      if(!id) {
+        log.warn(req.ip + " did not fill out their user id");
+        this.sendErrorCode(req, res, 401, "you must enter your own user ID");
+        reject();
+      }
+
+      resolve(this.auth.getUserById(id));
+
+    });
+
   }
 
   initApp() {
     this.app = express();
 
+    this.app.use(bodyParser.urlencoded({
+      extended: true
+    }));
+    
     this.app.enable('trust proxy');
 
     this.app.get('/', (req, res) => {
-      log.info(req.ip + ": /");
+      log.info(req.ip + " hit /");
       res.sendFile(path.join(process.cwd(), this.config.dir.static, 'index.html'));
+    });
+    
+    this.app.get('/users', (req, res) => {
+      log.info(req.ip + " hit /users");
+      res.sendFile(path.join(process.cwd(), this.config.dir.static, 'add.html'));
+    });
+
+    this.app.get('/add', (req, res) => {
+      log.info(req.ip + " hit /add");
+      res.sendFile(path.join(process.cwd(), this.config.dir.static, 'add.html'));
+    });
+    
+    this.app.post('/add', (req, res) => {
+      log.debug(req.ip + " has sent a request to add a user");
+
+      let id = req.body.user;
+
+      if(!id) {
+        log.warn(req.ip + " did not fill out their user id");
+        this.sendErrorCode(req, res, 401, "you must enter your own user ID");
+        return;
+      }
+
+      this.verifyUser(req, res)
+        .then((user) => {
+          
+          if(!user.isAdmin()) {
+            log.warn("unauthorized adduser attempt from " + id + ": " + req.ip);
+            this.sendErrorCode(req, res, 401, "you are not an admin");
+            return;
+          }
+
+          let name = req.body.name;
+          let privs = req.body.privs;
+          
+          if(name.length === 0) {
+            this.sendErrorCode(req, res, 400, "that username is too short");
+            return;
+          }
+
+          if(!privs) {
+            privs = this.config.auth.default_privs;
+            log.debug("no privileges specified, using default", privs);
+          } else {
+            privs = privs.split(/,\s*/);
+            log.debug("giving user-specified privileges", privs);
+          }
+
+          if(privs.length === 0) {
+            this.sendErrorCode(req, res, 400, "you must enter at least one privilege");
+            return;
+          }
+
+          for(let priv of privs) {
+            if(!this.auth.isValidPriv(priv)) {
+              this.sendErrorCode(req, res, 400, "invalid privilege: '" + priv + "'");
+              log.warn(priv + " is not a valid privilege");
+              return;
+            }
+          }
+
+          this.auth.addUser({
+            name: name,
+            privs: privs
+          })
+            .then((user) => {
+              log.info("added new user " + user.id + " (" + user.name + ") (authorized by " + id + ", from " + req.ip + ")");
+              this.sendErrorCode(req, res, 200, "new user: " + user.id + " (" + user.name + ")");
+            })
+            .catch((err) => {
+              log.warn("could not add user", err);
+              this.sendErrorCode(req, res, 500, "user add failed");
+            });
+          
+        })
+        .catch((err) => {
+          log.warn("unauthorized adduser attempt from anonymous user: " + req.ip, err);
+        });
+      
     });
 
     this.app.get('/config.js', (req, res) => {
@@ -79,9 +199,34 @@ class App {
     });
 
     this.app.post('/upload', this.upload.array('files'), (req, res, next) => {
-      this.addMulterFiles(req, res, req.files)
-        .then((files) => {
-          this.sendUploadedPage(req, res, files);
+
+      let id = req.body.user;
+
+      if(!id) {
+        this.sendErrorCode(req, res, 401);
+        return;
+      }
+
+      this.auth.getUserById(id)
+        .then((user) => {
+          
+          if(!user.canUpload()) {
+            log.warn("unauthorized upload attempt from " + user.id + ": " + req.ip);
+            
+            this.sendErrorCode(req, res, 401);
+
+            return;
+          }
+          
+          this.addMulterFiles(req, res, req.files, user)
+            .then((files) => {
+              this.sendUploadedPage(req, res, files);
+            });
+        })
+        .catch((err) => {
+          log.warn("unauthorized upload attempt from anonymous IP " + req.ip);
+
+          this.sendErrorCode(req, res, 401);
         });
     });
 
@@ -110,19 +255,19 @@ class App {
 
   }
 
-  addMulterFiles(req, res, files) {
+  addMulterFiles(req, res, files, user) {
     
     let promises = [];
     
     for(let file of files) {
-      promises.push(this.addMulterFile(req, res, file));
+      promises.push(this.addMulterFile(req, res, file, user));
     }
 
     return Promise.all(promises);
   }
 
   // file is in multer's format
-  addMulterFile(req, res, info) {
+  addMulterFile(req, res, info, user) {
 
     return new Promise((resolve, reject) => {
 
@@ -150,7 +295,7 @@ class App {
         }
       })
         .then((file) => {
-          log.info(req.ip + " uploaded a file: " + file.id + " ('" + file.name + "': " + util.pb(file.file.size) + ")");
+          log.info(user.id + " (" + user.name + ") uploaded a file: " + file.id + " ('" + file.name + "': " + util.pb(file.file.size) + ")");
           resolve({
             status: 'ok',
             file: file,
@@ -245,21 +390,24 @@ class App {
       });
   }
 
-  sendErrorCode(req, res, code) {
-    res.status(404);
+  sendErrorCode(req, res, code, message) {
+    res.status(code);
+    let string_code = HttpStatus.getStatusText(code);
+
+    if(!message) message = '';
 
     if(req.accepts('html')) {
       this.templates.error.then((page) => {
         res.send(page.render({
           code: code,
-          code_message: HttpStatus.getStatusText(code),
-          message: 'there was an error.'
+          code_message: string_code,
+          message: message
         }));
       });
     } else if(req.accepts('json')) {
-      res.send({ error: 'Not found' });
+      res.send({ error: string_code, message: message });
     } else {
-      res.type('txt').send('404 Not found');
+      res.type('txt').send(code + ' ' + string_code + ' (' + message + ')');
     }
     
   }

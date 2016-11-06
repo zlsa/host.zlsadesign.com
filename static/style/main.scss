@@ -3,19 +3,22 @@
 
 @import 'reset';
 @import 'colors';
+
 @import 'header';
+@import 'footer';
 
 @import 'metrics';
 
 @import 'upload';
+@import 'files';
 
 @import 'uploaded';
 
+@import 'input';
+@import 'add';
+
 @import 'error';
 
-@import 'files';
-
-@import 'footer';
 
 html {
   width: 100%;
@@ -36,6 +39,7 @@ body {
   padding: $margin;
 
   .go-home {
+    text-align: center;
     color: $fg-secondary;
     font-style: italic;
     

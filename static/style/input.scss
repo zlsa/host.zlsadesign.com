@@ -1,0 +1,32 @@
+
+@import 'colors';
+
+input[type=text] {
+  background: transparent;
+  border: 2px solid lighten($bg, 10);
+  
+  display: block;
+  margin: 0 auto;
+
+  margin-top: $spacing;
+
+  text-align: center;
+  font-weight: bold;
+
+  width: 100%;
+  max-width: 20em;
+
+  height: 32px;
+  line-height: 32px;
+
+  &:focus {
+    border-color: $border-color;
+  }
+  
+  &.invalid {
+    background-color: $error-bg;
+    border-color: $error-fg;
+  }
+  
+}
+

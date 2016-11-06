@@ -17,10 +17,10 @@ class Storage {
 
     this.config = this.app.config.storage;
 
-    log.verbose("starting NeDB with file '" + this.config.meta + "'");
+    log.verbose("starting storage NeDB with file '" + this.config.db + "'");
     
     this.db = nedb({
-      filename: this.config.meta,
+      filename: this.config.db,
       autoload: true
     });
 

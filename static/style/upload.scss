@@ -27,17 +27,20 @@
   }
 
   .file-upload-button {
-    
-    padding-left: $hpadding * 4;
-    padding-right: $hpadding * 4;
+
+    width: 25em;
     
     position: relative;
-
-    margin-right: $grid;
 
     &:hover {
       cursor: pointer;
       background: lighten($bg, 10);
+    }
+    
+    &.disabled {
+      opacity: 0.5;
+
+      pointer-events: none;
     }
     
     #file-upload {
@@ -60,7 +63,7 @@
   }
 
   button.submit {
-    margin-left: 0;
+    margin-left: $grid;
 
     &.disabled {
       opacity: 0.5;
@@ -73,6 +76,16 @@
       background: lighten($bg, 10);
     }
     
+  }
+
+  #user {
+    width: 25em !important;
+    
+    padding-bottom: 0 !important;
+    margin-top: $spacing;
+
+    text-align: center;
+    font-weight: bold;
   }
 
 }

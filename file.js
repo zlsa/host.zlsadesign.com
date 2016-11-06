@@ -165,7 +165,10 @@ class File {
     
     this.id = document.id;
     this.name = document.name;
-    this.upload_time = document.upload_time;
+    
+    this.time.upload = document.time.upload;
+    this.time.delete = document.time.delete;
+    
     this.deleted = document.deleted;
 
     this.file.path = path.join(this.config.dir, document.id);
@@ -190,7 +193,8 @@ class File {
       },
 
       time: {
-        upload: this.time.upload
+        upload: this.time.upload,
+        delete: this.time.delete
       },
 
       deleted: false,

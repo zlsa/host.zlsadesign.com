@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     
     <script src="/config.js"></script>
+    <script src="/static/script/user.js"></script>
     <script src="/static/script/files.js"></script>
   </head>
   
@@ -30,6 +31,8 @@
           <span class="needs-js">Select files</span>
           <input id="file-upload" type="file" name="files" multiple="multiple" />
         </div><button class="submit" type="submit">Upload</button>
+        
+        <input id="user" type="text" name="user" placeholder="Enter your user ID" />
         
         <script>$('button.submit').remove()</script>
 

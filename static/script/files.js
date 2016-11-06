@@ -93,6 +93,7 @@ class File {
   createUploader() {
     this.form = new FormData();
     this.form.append('files', this.file, this.file.name);
+    this.form.append('user', $('#user').val());
   }
 
   create() {
@@ -139,6 +140,15 @@ class File {
   }
 
   uploadComplete(event) {
+    if(!event.target.response.files) {
+      if(event.target.status === 401) {
+        this.setError('not authorized');
+      } else {
+        this.setError('file rejected');
+      }
+      return;
+    }
+    
     let upload = event.target.response.files[0];
 
     this.setStatus('uploaded');
@@ -150,7 +160,13 @@ class File {
       this.setError(upload.message);
     }
 
-    this.uploaded = true;
+    uploadNextFile();
+  }
+
+  uploadError(event) {
+    console.log(event);
+
+    this.setStatus('error');
     
     uploadNextFile();
   }
@@ -158,7 +174,6 @@ class File {
   uploadProgress(event) {
     if(!this.uploaded) {
       this.setProgress(event.loaded / event.total);
-      //this.setMessage(Math.floor(event.loaded / event.total * 100) + '%');
     }
   }
 
@@ -174,6 +189,10 @@ class File {
 
     xhr.addEventListener('load', function(event) {
       file.uploadComplete.call(file, event);
+    });
+
+    xhr.addEventListener('error', function(event) {
+      file.uploadError.call(file, event);
     });
 
     xhr.upload.onprogress = function(event) {
@@ -211,8 +230,6 @@ function setCanUpload(can) {
 
 function handleFilesChanged() {
   setCanUpload(true);
-
-  files = [];
 
   for(let i=0; i<this.files.length; i++) {
     let f = new File(this.files[i]);

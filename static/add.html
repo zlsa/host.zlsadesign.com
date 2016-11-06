@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  
+  <head>
+    <title>add user - host.zlsadesign.com</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="favicon.ico?v=foo" />
+    <link rel="stylesheet" href="/static/style/compiled.css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="/static/script/user.js"></script>
+  </head>
+  
+  <body class="adduser">
+
+    <header id="header">
+      <h1>add user</h1>
+    </header>
+
+    <section id="upload">
+      
+      <form action="/add" method="post">
+        
+        <input id="user" type="text" name="user" placeholder="Enter your user ID" />
+        <input id="name" type="text" name="name" placeholder="Name of new user" />
+        <button class="submit" type="submit">Add</button>
+        
+      </form>
+
+    </section>
+
+    <div class="go-home">
+      upload files at <a href="/">host.zlsadesign.com</a>
+    </div>
+
+  </body>
+  
+</html>

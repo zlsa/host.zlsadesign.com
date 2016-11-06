@@ -1,0 +1,16 @@
+
+@import 'colors';
+
+body.adduser {
+  
+  button.submit {
+    height: 32px !important;
+    line-height: 32px !important;
+    
+    width: 100%;
+    max-width: 20em;
+    
+    margin-top: $spacing;
+  }
+
+}
