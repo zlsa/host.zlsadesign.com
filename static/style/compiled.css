@@ -245,4 +245,17 @@ a:link {
 .size {
   color: #8aa3a8; }
 
+.userlist input {
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-weight: normal; }
+
+.userlist button.submit {
+  color: #deebed;
+  text-decoration: underline; }
+  .userlist button.submit:hover {
+    cursor: pointer; }
+
 /*# sourceMappingURL=compiled.css.map */

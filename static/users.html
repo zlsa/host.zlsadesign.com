@@ -7,27 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="/static/style/compiled.css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    <script src="/static/script/user.js"></script>
   </head>
   
-  <body class="upload-success">
+  <body class="userlist">
 
     <header id="header">
       <h1 class="code">users</h1>
     </header>
+    
+    <form action="/add" method="post">
 
-    <table class="files">
-      <thead></thead>
-      <tbody>
-        {{#users}}
+      <table class="files">
+        <thead></thead>
+        <tbody>
+          {{#users}}
+          <tr data-status="ok">
+            <td class="name">{{id}}</td>
+            <td class="size">{{name}}</td>
+            <td class="message">{{privs}}</td>
+          </tr>
+          {{/users}}
+        </tbody>
+        
+        <input id="user" type="hidden" name="user" />
+        <input type="hidden" name="showUsers" value="true" />
+        
         <tr data-status="ok">
-          <td class="name">{{id}}</td>
-          <td class="size">{{name}}</td>
-          <td class="message">{{privs}}</td>
+          <td class="name"><input id="name" type="text" name="name" placeholder="Name of new user" /></td>
+          <td class="size"><button class="submit" type="submit">Add</button></td>
+          <td class="message">(new users can only upload)</td>
         </tr>
-        {{/users}}
-      </tbody>
-    </table>
 
+      </table>
+
+    </form>
+    
     <div class="go-home">
       upload files at <a href="/">host.zlsadesign.com</a>
     </div>

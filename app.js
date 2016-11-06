@@ -127,20 +127,7 @@ class App {
             return;
           }
 
-          this.auth.getAllUsers()
-            .then((users) => {
-
-              let template_users = users.map((u) => {
-                return {
-                  id: u.id,
-                  name: u.name,
-                  privs: u.privs.join(', ')
-                };
-              });
-
-              log.info(req.ip + " hit /users");
-              this.sendUsersPage(req, res, users);
-            });
+          this.sendUsersPage(req, res);
 
         });
     });
@@ -197,7 +184,13 @@ class App {
           })
             .then((user) => {
               log.info("added new user " + user.id + " (" + user.name + ") (authorized by " + admin.id + ", from " + req.ip + ")");
-              this.sendErrorCode(req, res, 200, "new user: " + user.id + " (" + user.name + ")");
+              
+              if(req.body.showUsers) {
+                res.redirect(307, '/users');
+              } else {
+                this.sendErrorCode(req, res, 200, "new user: " + user.id + " (" + user.name + ")");
+              }
+              
             })
             .catch((err) => {
               log.warn("could not add user", err);
@@ -437,12 +430,33 @@ class App {
 
   sendUsersPage(req, res, users) {
 
-    this.templates.users.then((page) => {
-      res.send(page.render({
-        users: users
-      }));
-    });
-    
+    this.auth.getAllUsers()
+      .then((users) => {
+
+        users.sort((a, b) => {
+          if(a.time.create < b.time.create) return -1;
+          else if(a.time.create > b.time.create) return 1;
+          return 0;
+        });
+
+        let template_users = users.map((u) => {
+          return {
+            id: u.id,
+            name: u.name,
+            privs: u.privs.join(', ')
+          };
+        });
+
+        log.info(req.ip + " hit /users");
+        
+        this.templates.users.then((page) => {
+          res.send(page.render({
+            users: users
+          }));
+        });
+        
+      });
+
   }
 
   sendUploadedPage(req, res, files_list) {
