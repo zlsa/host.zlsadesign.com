@@ -78,7 +78,13 @@ class File {
   }
   
   getUrl() {
-    return '/' + this.id;
+    let ext = '';
+
+    if(this.file.mime_type in util.safe_mime) {
+      ext = '.' + mime.extension(util.safe_mime[this.file.mime_type]);
+    }
+    
+    return '/' + this.id + ext;
   }
 
   // Copies `source.path` to the storage location specified in

@@ -34,7 +34,7 @@ exports.s = function(n, singular, plural) {
   return plural;
 };
 
-exports.mime = {
+exports.safe_mime = {
   'text/plain': 'text/plain',
   'image/png': 'image/png',
   'image/jpeg': 'image/jpeg',

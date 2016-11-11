@@ -393,8 +393,8 @@ class App {
 
             let mime_type = file.file.mime_type;
 
-            if(mime_type in util.mime) {
-              mime_type = util.mime[mime_type];
+            if(mime_type in util.safe_mime) {
+              mime_type = util.safe_mime[mime_type];
               attach_type = 'inline';
             } else {
               mime_type = 'application/x-octet-stream';
