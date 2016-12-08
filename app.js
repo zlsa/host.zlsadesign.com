@@ -36,7 +36,7 @@ class App {
         db: './users.db'
       },
       upload: {
-        max_size: 30 * 1000 * 1000
+        max_size: 90 * 1000 * 1000
       },
       storage: {
         max_cache: 300,
