@@ -102,7 +102,6 @@ body.no-js #upload .file-upload-button {
     top: -2px;
     display: inline-block;
     opacity: 1 !important; }
-
 body.no-js .needs-js {
   display: none; }
 
@@ -112,9 +111,9 @@ body.no-js .needs-js {
     padding-left: 0;
     padding-right: 0;
     display: block; }
+
   button.submit {
     margin-top: 8px; } }
-
 .files {
   width: 100%;
   max-width: 640px;
@@ -151,7 +150,7 @@ body.no-js .needs-js {
       .files tr td.size {
         width: 6em; }
       .files tr td.message {
-        width: 20vw;
+        min-width: 40vw;
         max-width: 20em;
         padding-right: 24px;
         position: relative; }
@@ -211,7 +210,6 @@ body.adduser button.submit, body.adduser a.button {
   width: 100%;
   max-width: 20em;
   margin-top: 16px; }
-
 body.adduser hr {
   margin-top: 16px;
   border-top: 1px solid #365c63; }

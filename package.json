@@ -24,7 +24,7 @@
     "multer": "^1.2.0",
     "nedb-promise": "^2.0.0",
     "pretty-bytes": "^4.0.2",
-    "sharp": "^0.16.2",
+    "sharp": "^0.22.1",
     "shortid": "^2.2.6",
     "winston": "^2.3.0"
   }

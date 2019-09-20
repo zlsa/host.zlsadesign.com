@@ -70,7 +70,7 @@ $progress-bar-gap: 1px;
       }
 
       &.message {
-        width: 20vw;
+        min-width: 40vw;
         max-width: 20em;
         
         padding-right: $hpadding;
